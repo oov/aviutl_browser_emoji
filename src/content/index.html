@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<meta charset="utf-8">
+<title>絵文字 @git_tag@ ( @git_revision@ )</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+/* 変な余白が入らないようにCSSで詰めておく */
+* {
+  margin: 0;
+  padding: 0;
+}
+img {
+  display: block;
+}
+</style>
+<img src="svg/1f423.svg" data-key="1f423">
+<script>
+// params.param にはカスタムオブジェクトで渡した文字列が入っている
+function render(params) {
+  // 必ず Promise を返す
+  return new Promise(resolve => {
+    // 画面の準備ができたら resolve('') を呼ぶ
+    // もし Lua に合わせて返したいデータがあれば空文字列の代わりに内容を入れることもできる
+    const img = document.querySelector('img');
+    if (img.dataset.key != params.param) {
+      img.src = 'svg/'+params.param+'.svg';
+      img.dataset.key = params.param;
+      img.onload = e => resolve('');
+      img.onerror = e => resolve('');
+    } else {
+      resolve('');
+    }
+  });
+}
+
+// AviUtlBrowser.registerRenderer で function を登録しておくと、
+// 描画が必要になるたびに呼ばれるようになる
+AviUtlBrowser.registerRenderer(render);
+</script>
+</html>
